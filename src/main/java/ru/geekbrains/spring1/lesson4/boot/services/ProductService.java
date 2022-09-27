@@ -2,33 +2,35 @@ package ru.geekbrains.spring1.lesson4.boot.services;
 
 import org.springframework.stereotype.Service;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
-import ru.geekbrains.spring1.lesson4.boot.repositories.ProductRepository;
+import ru.geekbrains.spring1.lesson4.boot.repositories.InMemProductRepository;
+import ru.geekbrains.spring1.lesson4.boot.repositories.ProductDao;
+import ru.geekbrains.spring1.lesson4.boot.repositories.SqlProductImpl;
 
 import java.util.List;
 
 @Service
 public class ProductService {
-    private ProductRepository productRepository;
+    private ProductDao productDao;
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductService(SqlProductImpl sqlProduct) {
+        this.productDao = sqlProduct;
     }
 
 
     public List<Product> findAll() {
-        return productRepository.findAll();
+        return productDao.findAll();
     }
 
     public Product findProductById(Long id) {
-        return productRepository.findProductById(id);
+        return productDao.findById(id);
     }
 
     public void deleteById(Long id) {
-        productRepository.deleteById(id);
+        productDao.deleteById(id);
     }
 
     public void changePrice(Long productId, Integer delta) {
-        Product p = productRepository.findProductById(productId);
+        Product p = productDao.findById(productId);
         p.setPrice(p.getPrice() + delta);
     }
 }

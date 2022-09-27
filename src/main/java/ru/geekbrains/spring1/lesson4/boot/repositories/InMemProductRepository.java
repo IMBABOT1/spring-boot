@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class ProductRepository {
+public class InMemProductRepository implements ProductDao {
 
     private List<Product> products;
 
@@ -29,11 +29,8 @@ public class ProductRepository {
     }
 
 
-    public List<Product> findAll(){
-        return Collections.unmodifiableList(products);
-    }
-
-    public Product findProductById(Long id){
+    @Override
+    public Product findById(Long id) {
         for (Product p : products){
             if (p.getId() == id){
                 return p;
@@ -42,7 +39,23 @@ public class ProductRepository {
         throw new RuntimeException("Product with id: " + id + " doesnt exist");
     }
 
+    public List<Product> findAll(){
+        return Collections.unmodifiableList(products);
+    }
+
     public void deleteById(Long id) {
         products.removeIf(p -> p.getId().equals(id));
+    }
+
+    @Override
+    public Product saveOrUpdate(Product product) {
+        for (Product p : products){
+            if (p.getId() == product.getId()){
+                p = product;
+            }else {
+                products.add(product);
+            }
+        }
+        return product;
     }
 }
