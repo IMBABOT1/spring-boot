@@ -32,5 +32,6 @@ public class ProductService {
     public void changePrice(Long productId, Integer delta) {
         Product p = productDao.findById(productId);
         p.setPrice(p.getPrice() + delta);
+        productDao.saveOrUpdate(p);
     }
 }
