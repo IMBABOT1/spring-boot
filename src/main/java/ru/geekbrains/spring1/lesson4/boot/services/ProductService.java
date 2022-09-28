@@ -2,36 +2,38 @@ package ru.geekbrains.spring1.lesson4.boot.services;
 
 import org.springframework.stereotype.Service;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
-import ru.geekbrains.spring1.lesson4.boot.repositories.InMemProductRepository;
-import ru.geekbrains.spring1.lesson4.boot.repositories.ProductDao;
-import ru.geekbrains.spring1.lesson4.boot.repositories.SqlProductImpl;
+import ru.geekbrains.spring1.lesson4.boot.exceptions.ResourceNotFoundException;
+import ru.geekbrains.spring1.lesson4.boot.repositories.ProductRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
-    private ProductDao productDao;
+    private ProductRepository productRepository;
 
-    public ProductService(SqlProductImpl sqlProduct) {
-        this.productDao = sqlProduct;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
-
 
     public List<Product> findAll() {
-        return productDao.findAll();
+        return productRepository.findAll();
+    }
+    public Optional<Product> findById(Long id) {
+        return productRepository.findById(id);
     }
 
-    public Product findProductById(Long id) {
-        return productDao.findById(id);
-    }
 
     public void deleteById(Long id) {
-        productDao.deleteById(id);
+        productRepository.deleteById(id);
     }
 
+    @Transactional
     public void changePrice(Long productId, Integer delta) {
-        Product p = productDao.findById(productId);
-        p.setPrice(p.getPrice() + delta);
-        productDao.saveOrUpdate(p);
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Unable to change product's price. Product not found, id: " + productId));
+        product.setPrice(product.getPrice() + delta);
     }
+
 }

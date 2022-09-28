@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
+import ru.geekbrains.spring1.lesson4.boot.exceptions.ResourceNotFoundException;
 import ru.geekbrains.spring1.lesson4.boot.services.ProductService;
 
 import java.util.List;
@@ -19,8 +20,13 @@ public class ProductController {
         this.productService = productService;
     }
     @GetMapping("/products")
-    public List<Product> getAllStudents() {
+    public List<Product> getAllProducts() {
         return productService.findAll();
+    }
+
+    @GetMapping("/products/{id}")
+    public Product getProductByID(@PathVariable Long id) {
+        return productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
     }
 
     @GetMapping("/products/delete/{id}")
