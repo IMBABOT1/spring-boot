@@ -10,5 +10,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findAllByPriceBetween(Integer min, Integer max);
 
-
 }

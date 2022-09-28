@@ -1,9 +1,6 @@
 package ru.geekbrains.spring1.lesson4.boot.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
 import ru.geekbrains.spring1.lesson4.boot.exceptions.ResourceNotFoundException;
 import ru.geekbrains.spring1.lesson4.boot.services.ProductService;
@@ -39,8 +36,11 @@ public class ProductController {
         productService.changePrice(productId, delta);
     }
 
+
+
     @GetMapping("/products/price_between")
     public List<Product> findProductsByPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "100") Integer max) {
         return productService.findByPriceBetween(min, max);
     }
+
 }

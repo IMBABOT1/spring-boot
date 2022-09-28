@@ -15,6 +15,9 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
             });
     }
 
+
+
+
     $scope.changePrice = function (productId, delta) {
         $http({
             url: contextPath + '/products/change_price',
