@@ -38,4 +38,9 @@ public class ProductController {
     public void changeScore(@RequestParam Long productId, @RequestParam Integer delta) {
         productService.changePrice(productId, delta);
     }
+
+    @GetMapping("/products/price_between")
+    public List<Product> findProductsByPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "100") Integer max) {
+        return productService.findByPriceBetween(min, max);
+    }
 }
