@@ -3,6 +3,7 @@ package ru.geekbrains.spring1.lesson4.boot.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import ru.geekbrains.spring1.lesson4.boot.converters.ProductConverter;
 import ru.geekbrains.spring1.lesson4.boot.dto.ProductDto;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
 import ru.geekbrains.spring1.lesson4.boot.exceptions.ResourceNotFoundException;
@@ -15,6 +16,7 @@ import ru.geekbrains.spring1.lesson4.boot.services.ProductsService;
 public class ProductsController {
 
     private final ProductsService productsService;
+    private final ProductConverter productConverter;
 
 
     @GetMapping
@@ -27,25 +29,28 @@ public class ProductsController {
             page = 1;
         }
 
-        return productsService.findAll(minPrice, maxPrice, titlePart, page).map(p -> new ProductDto(p.getId(), p.getTitle(), p.getPrice()));
+        return productsService.findAll(minPrice, maxPrice, titlePart, page).map(
+                p -> productConverter.entityToDto(p));
+    }
+
+    @GetMapping("/{id}")
+    public ProductDto getProductByID(@PathVariable Long id) {
+        Product product = productsService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
+        return productConverter.entityToDto(product);
     }
 
 
     @PostMapping
-    public Product addNewProducts(@RequestBody Product product) {
-        return productsService.save(product);
+    public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
+        Product product = productConverter.dtoToEntity(productDto);
+        product = productsService.save(product);
+        return productConverter.entityToDto(product);
     }
 
     @PutMapping
-    public Product updateProduct(@RequestBody Product product) {
-        return productsService.save(product);
+    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
+        Product product = productsService.update(productDto);
+        return productConverter.entityToDto(product);
     }
-
-
-    @GetMapping("/{id}")
-    public Product getProductByID(@PathVariable Long id) {
-        return productsService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
-    }
-
 
 }

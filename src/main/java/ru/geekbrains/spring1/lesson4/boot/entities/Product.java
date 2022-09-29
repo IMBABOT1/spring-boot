@@ -1,5 +1,6 @@
 package ru.geekbrains.spring1.lesson4.boot.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "products")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -22,10 +24,5 @@ public class Product {
     @Column(name = "price")
     private Integer price;
 
-    public Product(Long id, String title, Integer price) {
-        this.id = id;
-        this.title = title;
-        this.price = price;
-    }
 
 }
