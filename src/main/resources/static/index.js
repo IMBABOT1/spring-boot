@@ -16,8 +16,6 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     }
 
 
-
-
     $scope.changePrice = function (productId, delta) {
         $http({
             url: contextPath + '/products/change_price',
@@ -38,7 +36,25 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         $http.post(contextPath + '/products', $scope.newProduct)
             .then(function (response) {
                 $scope.loadProducts();
+                $scope.newProduct = null;
             });
+    }
+
+
+    $scope.filter = function () {
+        console.log($scope.calcAdd);
+        $http({
+            url: contextPath + '/products/price_between',
+            method: 'get',
+            params: {
+                min: $scope.min,
+                max: $scope.max
+            }
+        }).then(function (response) {
+            $scope.ProductList = response.data;
+            $scope.min = 0;
+            $scope.max = 100;
+        });
     }
 
 
