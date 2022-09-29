@@ -40,4 +40,7 @@ public class ProductService {
         return productRepository.findAllByPriceBetween(min, max);
     }
 
+    public Product save(Product product) {
+        return productRepository.save(product);
+    }
 }

@@ -31,5 +31,16 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
         });
     }
 
+
+
+    $scope.addProduct = function () {
+        console.log($scope.newProduct);
+        $http.post(contextPath + '/products', $scope.newProduct)
+            .then(function (response) {
+                $scope.loadProducts();
+            });
+    }
+
+
     $scope.loadProducts();
 });

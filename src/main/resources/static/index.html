@@ -39,6 +39,15 @@
         </tbody>
     </table>
 
+    <h3>Add product</h3>
+    <form novalidate ng-submit="addProduct()">
+        <input class="form-control" type="text" placeholder="title" ng-model="newProduct.title">
+        <p></p>
+        <input class="form-control" type="number" placeholder="price" ng-model="newProduct.price">
+        <p></p>
+        <button type="submit" class="btn btn-primary">Add Product</button>
+    </form>
+
 
 </div>
 </body>

@@ -21,6 +21,13 @@ public class ProductController {
         return productService.findAll();
     }
 
+
+    @PostMapping("/products")
+    public Product addNewProducts(@RequestBody Product product) {
+        return productService.save(product);
+    }
+
+
     @GetMapping("/products/{id}")
     public Product getProductByID(@PathVariable Long id) {
         return productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
@@ -35,8 +42,6 @@ public class ProductController {
     public void changeScore(@RequestParam Long productId, @RequestParam Integer delta) {
         productService.changePrice(productId, delta);
     }
-
-
 
     @GetMapping("/products/price_between")
     public List<Product> findProductsByPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "100") Integer max) {
