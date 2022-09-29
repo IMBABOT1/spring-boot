@@ -11,40 +11,10 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
                 max_price: $scope.filter ? $scope.filter.max_price : null
             }
         }).then(function (response) {
-            $scope.ProductList = response.data.content;
+            $scope.ProductList = response.data;
         });
     };
 
-    $scope.deleteProduct = function (productId) {
-        $http.delete(contextPath + '/products/delete/' + productId)
-            .then(function (response) {
-                $scope.loadProducts();
-            });
-    }
-
-
-    $scope.changePrice = function (productId, delta) {
-        $http({
-            url: contextPath + '/products/change_price',
-            method: 'GET',
-            params: {
-                productId: productId,
-                delta: delta
-            }
-        }).then(function (response) {
-            $scope.loadProducts();
-        });
-    }
-
-
-
-    $scope.addProduct = function () {
-        $http.post(contextPath + $scope.newProduct)
-            .then(function (response) {
-                $scope.loadProducts();
-                $scope.newProduct = null;
-            });
-    }
 
 
 
