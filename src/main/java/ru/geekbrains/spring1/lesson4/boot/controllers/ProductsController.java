@@ -8,6 +8,7 @@ import ru.geekbrains.spring1.lesson4.boot.dto.ProductDto;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
 import ru.geekbrains.spring1.lesson4.boot.exceptions.ResourceNotFoundException;
 import ru.geekbrains.spring1.lesson4.boot.services.ProductsService;
+import ru.geekbrains.spring1.lesson4.boot.validators.ProductValidator;
 
 
 @RestController
@@ -17,6 +18,7 @@ public class ProductsController {
 
     private final ProductsService productsService;
     private final ProductConverter productConverter;
+    private final ProductValidator productValidator;
 
 
     @GetMapping
@@ -42,6 +44,7 @@ public class ProductsController {
 
     @PostMapping
     public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
+        productValidator.validate(productDto);
         Product product = productConverter.dtoToEntity(productDto);
         product = productsService.save(product);
         return productConverter.entityToDto(product);
@@ -49,6 +52,7 @@ public class ProductsController {
 
     @PutMapping
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
+        productValidator.validate(productDto);
         Product product = productsService.update(productDto);
         return productConverter.entityToDto(product);
     }
