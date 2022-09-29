@@ -37,21 +37,21 @@ public class ProductController {
         Product product = new Product(productDto.getId(), productDto.getTitle(), productDto.getPrice(),"secretKey");
         product.setId(null);
         productService.save(product);
-        return productDto;
+        return new ProductDto(product);
     }
 
     @PutMapping
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
         Product product = new Product(productDto.getId(), productDto.getTitle(), productDto.getPrice(),"secretKey");
         productService.save(product);
-        return productDto;
+        return new ProductDto(product);
     }
 
 
     @GetMapping("/{id}")
     public ProductDto getProductByID(@PathVariable Long id) {
-        Product p = productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
-        return new ProductDto(p);
+        Product product = productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
+        return new ProductDto(product);
     }
 
     @DeleteMapping("/delete/{id}")
