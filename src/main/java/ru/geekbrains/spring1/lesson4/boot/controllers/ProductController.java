@@ -8,6 +8,7 @@ import ru.geekbrains.spring1.lesson4.boot.services.ProductService;
 
 
 @RestController
+@RequestMapping("/api/v1/products")
 public class ProductController {
 
     private ProductService productService;
@@ -16,7 +17,7 @@ public class ProductController {
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
-    @GetMapping("/products")
+    @GetMapping
     public Page<Product> getAllProducts(@RequestParam(name = "p", defaultValue = "1") Integer page,
                                         @RequestParam(name = "min_price", required = false) Integer minPrice,
                                         @RequestParam(name = "max_price", required = false) Integer maxPrice,
@@ -29,26 +30,32 @@ public class ProductController {
     }
 
 
-    @PostMapping("/products")
+    @PostMapping
     public Product addNewProducts(@RequestBody Product product) {
+        product.setId(null);
+        return productService.save(product);
+    }
+
+    @PutMapping
+    public Product updateProduct(@RequestBody Product product) {
         return productService.save(product);
     }
 
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/{id}")
     public Product getProductByID(@PathVariable Long id) {
         return productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
     }
 
-    @GetMapping("/products/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteById(@PathVariable Long id) {
+        System.out.println(id);
         productService.deleteById(id);
     }
 
-    @GetMapping("/products/change_price")
+    @GetMapping("/change_price")
     public void changeScore(@RequestParam Long productId, @RequestParam Integer delta) {
         productService.changePrice(productId, delta);
     }
-
 
 }
