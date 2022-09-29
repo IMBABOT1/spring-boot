@@ -27,27 +27,31 @@ public class ProductController {
         if (page < 1){
             page = 1;
         }
+
         return productService.find(minPrice, maxPrice, titlePart, page).map(p -> new ProductDto(p));
     }
 
 
     @PostMapping
-    public Product addNewProducts(@RequestBody ProductDto productDto) {
+    public ProductDto addNewProducts(@RequestBody ProductDto productDto) {
         Product product = new Product(productDto.getId(), productDto.getTitle(), productDto.getPrice(),"secretKey");
         product.setId(null);
-        return productService.save(product);
+        productService.save(product);
+        return productDto;
     }
 
     @PutMapping
-    public Product updateProduct(@RequestBody ProductDto productDto) {
+    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
         Product product = new Product(productDto.getId(), productDto.getTitle(), productDto.getPrice(),"secretKey");
-        return productService.save(product);
+        productService.save(product);
+        return productDto;
     }
 
 
     @GetMapping("/{id}")
-    public Product getProductByID(@PathVariable Long id) {
-        return productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
+    public ProductDto getProductByID(@PathVariable Long id) {
+        Product p = productService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
+        return new ProductDto(p);
     }
 
     @DeleteMapping("/delete/{id}")
