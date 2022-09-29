@@ -1,11 +1,11 @@
 package ru.geekbrains.spring1.lesson4.boot.controllers;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
 import ru.geekbrains.spring1.lesson4.boot.exceptions.ResourceNotFoundException;
 import ru.geekbrains.spring1.lesson4.boot.services.ProductService;
 
-import java.util.List;
 
 @RestController
 public class ProductController {
@@ -17,8 +17,15 @@ public class ProductController {
         this.productService = productService;
     }
     @GetMapping("/products")
-    public List<Product> getAllProducts() {
-        return productService.findAll();
+    public Page<Product> getAllProducts(@RequestParam(name = "p", defaultValue = "1") Integer page,
+                                        @RequestParam(name = "min_price", required = false) Integer minPrice,
+                                        @RequestParam(name = "max_price", required = false) Integer maxPrice,
+                                        @RequestParam(name = "title_part", required = false) String titlePart
+    ) {
+        if (page < 1){
+            page = 1;
+        }
+        return productService.find(minPrice, maxPrice, titlePart, page);
     }
 
 
@@ -43,9 +50,5 @@ public class ProductController {
         productService.changePrice(productId, delta);
     }
 
-    @GetMapping("/products/price_between")
-    public List<Product> findProductsByPriceBetween(@RequestParam(defaultValue = "0") Integer min, @RequestParam(defaultValue = "100") Integer max) {
-        return productService.findByPriceBetween(min, max);
-    }
 
 }
