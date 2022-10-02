@@ -3,6 +3,7 @@ package ru.geekbrains.spring1.lesson4.boot.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import ru.geekbrains.spring1.lesson4.boot.cart.Cart;
 import ru.geekbrains.spring1.lesson4.boot.converters.ProductConverter;
 import ru.geekbrains.spring1.lesson4.boot.dto.ProductDto;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
@@ -19,6 +20,8 @@ public class ProductsController {
     private final ProductsService productsService;
     private final ProductConverter productConverter;
     private final ProductValidator productValidator;
+
+    private final Cart cart;
 
 
     @GetMapping
@@ -39,6 +42,12 @@ public class ProductsController {
     public ProductDto getProductByID(@PathVariable Long id) {
         Product product = productsService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found, id: " + id));
         return productConverter.entityToDto(product);
+    }
+
+    @GetMapping("/add/{id}")
+    public void deleteById(@PathVariable Long id) {
+        cart.add(id);
+        System.out.println(cart);
     }
 
 

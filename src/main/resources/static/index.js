@@ -16,7 +16,12 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     };
 
 
-
+    $scope.addToCart = function (productId) {
+        $http.get(contextPath + '/products/add/' + productId)
+            .then(function (response) {
+                $scope.loadStudents();
+            });
+    }
 
     $scope.loadProducts();
 });
