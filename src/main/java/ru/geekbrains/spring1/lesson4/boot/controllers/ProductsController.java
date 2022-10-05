@@ -3,13 +3,14 @@ package ru.geekbrains.spring1.lesson4.boot.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import ru.geekbrains.spring1.lesson4.boot.cart.Cart;
 import ru.geekbrains.spring1.lesson4.boot.converters.ProductConverter;
 import ru.geekbrains.spring1.lesson4.boot.dto.ProductDto;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
 import ru.geekbrains.spring1.lesson4.boot.exceptions.ResourceNotFoundException;
 import ru.geekbrains.spring1.lesson4.boot.services.ProductsService;
 import ru.geekbrains.spring1.lesson4.boot.validators.ProductValidator;
+
+import java.util.List;
 
 
 @RestController
@@ -20,9 +21,6 @@ public class ProductsController {
     private final ProductsService productsService;
     private final ProductConverter productConverter;
     private final ProductValidator productValidator;
-
-    private final Cart cart;
-
 
     @GetMapping
     public Page<ProductDto> getAllProducts(@RequestParam(name = "p", defaultValue = "1") Integer page,
@@ -44,13 +42,6 @@ public class ProductsController {
         return productConverter.entityToDto(product);
     }
 
-    @GetMapping("/add/{id}")
-    public void deleteById(@PathVariable Long id) {
-        cart.add(id);
-        System.out.println(cart);
-    }
-
-
     @PostMapping
     public ProductDto saveNewProduct(@RequestBody ProductDto productDto) {
         productValidator.validate(productDto);
@@ -65,5 +56,4 @@ public class ProductsController {
         Product product = productsService.update(productDto);
         return productConverter.entityToDto(product);
     }
-
 }
