@@ -16,14 +16,6 @@ angular.module('app', []).controller('indexController', function ($scope, $http)
     };
 
 
-    $scope.cartProducts = function () {
-        $http({
-            url: contextPath + '/products/cart',
-            method: 'GET',
-        }).then(function (response) {
-            $scope.CartProductList = response.data;
-        });
-    };
 
 
     $scope.loadProducts();
