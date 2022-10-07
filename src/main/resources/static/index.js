@@ -5,6 +5,14 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
     }
 
+    $scope.register = function (){
+        console.log($scope.newUserJson)
+        $http.post(contextPath + '/users/id', $scope.newUserJson)
+            .then(function (response){
+                alert('NEW USER: ' + response.data.username);
+            });
+    }
+
     $scope.tryToAuth = function () {
         $http.post('http://localhost:8189/app/auth', $scope.user)
             .then(function successCallback(response) {
