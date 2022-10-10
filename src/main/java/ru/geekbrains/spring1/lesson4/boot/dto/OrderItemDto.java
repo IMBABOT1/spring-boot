@@ -1,11 +1,13 @@
 package ru.geekbrains.spring1.lesson4.boot.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.geekbrains.spring1.lesson4.boot.entities.Product;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemDto {
     private Long productId;
     private String productTitle;
