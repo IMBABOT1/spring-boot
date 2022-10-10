@@ -5,11 +5,38 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
         $http.defaults.headers.common.Authorization = 'Bearer ' + $localStorage.springWebUser.token;
     }
 
-    $scope.register = function (){
-        console.log($scope.newUserJson)
-        $http.post(contextPath + '/users/id', $scope.newUserJson)
-            .then(function (response){
-                alert('NEW USER: ' + response.data.username);
+    $scope.loadProducts = function (pageIndex = 1) {
+        $http({
+            url: contextPath + '/products',
+            method: 'GET',
+            params: {
+                title_part: $scope.filter ? $scope.filter.title_part : null,
+                min_price: $scope.filter ? $scope.filter.min_price : null,
+                max_price: $scope.filter ? $scope.filter.max_price : null
+            }
+        }).then(function (response) {
+            $scope.ProductsPage = response.data;
+        });
+    };
+
+    $scope.addToCart = function (productId) {
+        $http.get('http://localhost:8189/app/api/v1/carts/add/' + productId)
+            .then(function (response) {
+                $scope.loadCart();
+            });
+    }
+
+    $scope.clearCart = function () {
+        $http.get('http://localhost:8189/app/api/v1/carts/clear')
+            .then(function (response) {
+                $scope.loadCart();
+            });
+    }
+
+    $scope.loadCart = function () {
+        $http.get('http://localhost:8189/app/api/v1/carts')
+            .then(function (response) {
+                $scope.Cart = response.data;
             });
     }
 
@@ -26,21 +53,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
             }, function errorCallback(response) {
             });
     };
-
-    $scope.loadProducts = function () {
-        $http({
-            url: contextPath + '/products',
-            method: 'GET',
-            params: {
-                title_part: $scope.filter ? $scope.filter.title_part : null,
-                min_price: $scope.filter ? $scope.filter.min_price : null,
-                max_price: $scope.filter ? $scope.filter.max_price : null
-            }
-        }).then(function (response) {
-            $scope.ProductList = response.data;
-        });
-    };
-
 
     $scope.tryToLogout = function () {
         $scope.clearUser();
@@ -74,6 +86,6 @@ angular.module('app', ['ngStorage']).controller('indexController', function ($sc
             });
     }
 
-
     $scope.loadProducts();
+    $scope.loadCart();
 });
