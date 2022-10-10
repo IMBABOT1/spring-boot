@@ -10,12 +10,11 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+
 @Entity
 @Data
 @Table(name = "users")
-@NoArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -35,13 +34,6 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
-
-    public User(Long id, String username, String password, String email) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
 
     @CreationTimestamp
     @Column(name = "created_at")

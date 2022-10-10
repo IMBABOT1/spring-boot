@@ -1,24 +1,42 @@
 package ru.geekbrains.spring1.lesson4.boot.entities;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-
 @Entity
+@Table(name = "order_items")
 @Data
-@Table(name = "roles")
-public class Role {
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "price_per_product")
+    private Integer pricePerProduct;
+
+    @Column(name = "price")
+    private Integer price;
 
     @CreationTimestamp
     @Column(name = "created_at")

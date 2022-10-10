@@ -16,4 +16,3 @@ public class ProfileController {
         return new ProfileDto(principal.getName());
     }
 }
-

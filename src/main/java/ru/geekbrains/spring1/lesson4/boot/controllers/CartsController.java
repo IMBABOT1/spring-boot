@@ -10,7 +10,7 @@ import ru.geekbrains.spring1.lesson4.boot.services.CartService;
 
 
 @RestController
-@RequestMapping("/api/v1/carts")
+@RequestMapping("/api/v1/cart")
 @RequiredArgsConstructor
 public class CartsController {
     private final CartService cartService;
@@ -30,5 +30,6 @@ public class CartsController {
         cartService.getCurrentCart().clear();
     }
 }
+
 
 

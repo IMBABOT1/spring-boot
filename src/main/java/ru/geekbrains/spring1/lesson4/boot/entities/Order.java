@@ -2,10 +2,13 @@ package ru.geekbrains.spring1.lesson4.boot.entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.geekbrains.spring1.lesson4.boot.dto.OrderItemDto;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
+
 
 @Entity
 @Table(name = "orders")
@@ -13,17 +16,32 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "totalprice")
-    private int totalPrice;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<OrderItem> items;
+
+    @Column(name = "total_price")
+    private Integer totalPrice;
+
     @Column(name = "address")
     private String address;
+
     @Column(name = "phone")
     private String phone;
 
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
